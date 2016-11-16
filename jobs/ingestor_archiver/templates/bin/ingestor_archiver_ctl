@@ -22,8 +22,9 @@ case $1 in
     echo $$ > $PIDFILE
 
     <% p("logstash.plugins").each do |plugin| %>
-    /var/vcap/packages/logstash/bin/logstash-plugin install <%= plugin["name"] %> \
-      <%= plugin.except("name").map { |key, value| "--#{key}=#{value}" }.join(" ") %>
+    /var/vcap/packages/logstash/bin/logstash-plugin install \
+      <%= plugin.except("name").map { |key, value| "--#{key}=#{value}" }.join(" ") %> \
+      <%= plugin["name"] %>
     <% end %>
 
     exec /var/vcap/packages/logstash/bin/logstash agent \
