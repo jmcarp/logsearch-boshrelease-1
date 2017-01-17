@@ -69,20 +69,22 @@ output {
 	<% if_p("logstash_ingestor.outputs") do |ingestor_outputs| %>
 	  <% ingestor_outputs.each do |output| %>
 	    <%= output['plugin'] %> {
-        <% if 'redis' == output['plugin']
-          output['options'] = {
-            "host" => p('redis.host'),
-            "port" => p('redis.port'),
-            "data_type" => "list",
-            "key" => p('redis.key'),
-            "batch" => true,
-            "batch_events" => 50,
-          }
-          if_p('redis.congestion_interval') do |interval|
-            output['options']['congestion_interval'] = interval
-          end
-          if_p('redis.congestion_threshold') do |threshold|
-            output['options']['congestion_threshold'] = threshold
+        <% 
+          if 'redis' == output['plugin']
+            output['options'] = {
+              "host" => p('redis.host'),
+              "port" => p('redis.port'),
+              "data_type" => "list",
+              "key" => p('redis.key'),
+              "batch" => true,
+              "batch_events" => 50,
+            }
+            if_p('redis.congestion_interval') do |interval|
+              output['options']['congestion_interval'] = interval
+            end
+            if_p('redis.congestion_threshold') do |threshold|
+              output['options']['congestion_threshold'] = threshold
+            end
           end
         %>
         <% output['options'].each do | k, v | %>
