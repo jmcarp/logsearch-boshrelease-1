@@ -2,6 +2,13 @@
 
 set -e
 
+<% if p('elasticsearch.node.allow_data') %>
+curl -s \
+  -X PUT \
+  '<%= p('elasticsearch.master_hosts').first %>:9200/_cluster/settings' \
+  -d '{"transient": {"cluster.routing.allocation.enable": "all"}}'
+<% end %>
+
 out=$(mktemp health-XXXXXX)
 remaining=<%= p("elasticsearch.health.timeout") %>
 
